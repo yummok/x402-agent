@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>x402 Payment Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --card: #141414; --border: #2a2a2a; --text: #f0f0f0;
+      --muted: #888; --accent: #8b5cf6; --accent-dim: #6d28d9;
+      --green: #22c55e; --red: #ef4444; --blue: #3b82f6; --orange: #f59e0b;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+      padding: 24px; line-height: 1.6;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 8px; }
+    .stat-value { font-size: 1.4rem; font-weight: 600; }
+    .stat-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    .stat-value.green { color: var(--green); }
+
+    .section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .section-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; background: var(--accent-dim); color: #fff; }
+
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+    input[type="text"], select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 16px; color: var(--text); font-size: 0.95rem; outline: none; transition: border-color 0.2s;
+    }
+    input[type="text"]:focus, select:focus { border-color: var(--accent); }
+    .form-row { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
+    .btn {
+      width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 12px 24px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-dim); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .preset {
+      font-size: 0.8rem; padding: 4px 12px; border-radius: 99px; background: var(--bg);
+      border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; color: var(--muted);
+    }
+    .preset:hover { border-color: var(--accent); color: var(--text); }
+
+    .result-box { margin-top: 20px; padding: 16px; border-radius: 8px; font-size: 0.85rem; display: none; }
+    .result-box.show { display: block; }
+    .result-box.success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+    .result-box.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+    .result-box.loading { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); }
+    .result-line { margin-bottom: 4px; }
+    .result-line a { color: var(--blue); text-decoration: none; }
+    .result-line a:hover { text-decoration: underline; }
+
+    .history-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .history-table th { text-align: left; padding: 10px 12px; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; }
+    .history-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    .history-table tr:hover { background: var(--bg); }
+    .status-pill { font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+    .status-pill.success { background: rgba(34,197,94,0.15); color: var(--green); }
+    .status-pill.failed { background: rgba(239,68,68,0.15); color: var(--red); }
+    .tx-link { color: var(--blue); font-family: monospace; font-size: 0.78rem; }
+
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--accent); border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ x402 Payment Dashboard</h1>
+    <p class="subtitle">USDC micropayments on Base mainnet · Powered by CDP facilitator</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Wallet Address</div>
+        <div class="stat-value" style="font-size:0.82rem;font-family:monospace">0x5F3b…24c6f</div>
+        <div class="stat-sub">Base mainnet</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">USDC Balance</div>
+        <div class="stat-value green">~1.48 USDC</div>
+        <div class="stat-sub">≈ 148 payments left</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Payments Made</div>
+        <div class="stat-value" id="totalPayments">3</div>
+        <div class="stat-sub">across 2 networks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Spent</div>
+        <div class="stat-value">$0.03</div>
+        <div class="stat-sub">0.01 USDC / request</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Submit Data Request <span class="badge">x402 auto-pay</span></div>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px">
+        Enter any x402-gated URL. The agent will pay 0.01 USDC and fetch the data automatically.
+      </p>
+      <div class="form-group">
+        <label>Endpoint URL</label>
+        <div class="form-row">
+          <input type="text" id="urlInput" placeholder="https://api.interzoid.com/getfullnamematch?fullname=John+Smith" />
+          <select id="methodSelect">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+          </select>
+        </div>
+        <div class="presets">
+          <span class="preset" onclick="setPreset('https://api.interzoid.com/getfullnamematch?fullname=Albert+Einstein')">Interzoid – Name Match</span>
+          <span class="preset" onclick="setPreset('https://superagent-42aeca08.base44.app/functions/x402SellPremiumJoke')">Premium Joke (self)</span>
+          <span class="preset" onclick="setPreset('https://x402.org/protected')">x402.org Protected (testnet)</span>
+        </div>
+      </div>
+      <button class="btn" id="submitBtn" onclick="submitRequest()">Pay & Fetch</button>
+      <div class="result-box" id="resultBox"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Payment History</div>
+      <table class="history-table" id="historyTable">
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Amount</th>
+            <th>Network</th>
+            <th>Tx Hash</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr>
+            <td>Interzoid – Name Match (Jenny Smith)</td>
+            <td>0.01 USDC</td>
+            <td>Base</td>
+            <td><a class="tx-link" href="https://basescan.org/tx/0x85e07f4938fabea8571d05011dbd9e124809aed23711f211a88a658b82e552a9" target="_blank">0x85e0…52a9</a></td>
+            <td><span class="status-pill success">success</span></td>
+          </tr>
+          <tr>
+            <td>x402SellPremiumJoke (self)</td>
+            <td>0.01 USDC</td>
+            <td>Base</td>
+            <td><a class="tx-link" href="https://basescan.org/tx/0xb2d9f8feb82a38705fd73096b71692866d567b6ed5fff0d259685c6b1e2234bd" target="_blank">0xb2d9…34bd</a></td>
+            <td><span class="status-pill success">success</span></td>
+          </tr>
+          <tr>
+            <td>x402.org/protected</td>
+            <td>0.01 USDC</td>
+            <td>Base Sepolia</td>
+            <td><a class="tx-link" href="https://sepolia.basescan.org/tx/0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37" target="_blank">0xb331…5a37</a></td>
+            <td><span class="status-pill success">success</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Active Automations</div>
+      <table class="history-table">
+        <thead>
+          <tr><th>Name</th><th>Type</th><th>Schedule / Trigger</th><th>Cost / Run</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Daily x402 Data Purchase</td>
+            <td>Scheduled</td>
+            <td>Every day at 9:00 AM (Rome)</td>
+            <td>0.01 USDC</td>
+          </tr>
+          <tr>
+            <td>x402 Auto-Pay on Data Request</td>
+            <td>Entity trigger</td>
+            <td>On X402DataRequest create</td>
+            <td>0.01 USDC</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://superagent-42aeca08.base44.app/functions/x402PayAndFetch";
+    let paymentCount = 3;
+
+    function setPreset(url) {
+      document.getElementById('urlInput').value = url;
+    }
+
+    async function submitRequest() {
+      const url = document.getElementById('urlInput').value.trim();
+      const method = document.getElementById('methodSelect').value;
+      const btn = document.getElementById('submitBtn');
+      const box = document.getElementById('resultBox');
+
+      if (!url) { showResult('error', 'Please enter a URL'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Paying...';
+      showResult('loading', '<span class="spinner"></span> Sending payment & fetching data...');
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, method })
+        });
+        const data = await res.json();
+
+        if (data.paid) {
+          const tx = data.settlement?.transaction || 'N/A';
+          const shortTx = tx.slice(0, 8) + '…' + tx.slice(-4);
+          const isTestnet = data.network?.includes('84532') || data.network?.includes('sepolia');
+          const explorer = isTestnet ? 'sepolia.basescan.org' : 'basescan.org';
+          const amountUsdc = (parseInt(data.amountPaidAtomic) / 1000000).toFixed(2);
+          const bodyPreview = typeof data.body === 'object'
+            ? JSON.stringify(data.body).slice(0, 200)
+            : String(data.body).slice(0, 200);
+
+          showResult('success', `
+            <div class="result-line"><strong>✅ Payment settled — ${amountUsdc} USDC</strong></div>
+            <div class="result-line">Network: ${data.network}</div>
+            <div class="result-line">Payee: <span style="font-family:monospace;font-size:0.8rem">${data.payTo}</span></div>
+            <div class="result-line">Tx: <a href="https://${explorer}/tx/${tx}" target="_blank">${shortTx}</a></div>
+            <div class="result-line" style="margin-top:8px;color:var(--muted)">Response: ${bodyPreview}${bodyPreview.length >= 200 ? '…' : ''}</div>
+          `);
+
+          addToHistory(url, amountUsdc, data.network, tx, 'success');
+          paymentCount++;
+          document.getElementById('totalPayments').textContent = paymentCount;
+        } else if (data.reason === 'Resource did not require payment') {
+          showResult('error', 'This endpoint did not return HTTP 402 — it may not be x402-gated.');
+        } else {
+          showResult('error', `Payment failed: ${data.reason || data.error || 'Unknown error'}`);
+        }
+      } catch (err) {
+        showResult('error', `Request failed: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Pay & Fetch';
+      }
+    }
+
+    function showResult(type, html) {
+      const box = document.getElementById('resultBox');
+      box.className = 'result-box show ' + type;
+      box.innerHTML = html;
+    }
+
+    function addToHistory(url, amount, network, tx, status) {
+      const tbody = document.getElementById('historyBody');
+      const shortUrl = url.length > 40 ? url.slice(0, 37) + '…' : url;
+      const shortTx = tx.slice(0, 8) + '…' + tx.slice(-4);
+      const isTestnet = network?.includes('84532') || network?.includes('sepolia');
+      const explorer = isTestnet ? 'sepolia.basescan.org' : 'basescan.org';
+      const netLabel = isTestnet ? 'Base Sepolia' : 'Base';
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${shortUrl}</td>
+        <td>${amount} USDC</td>
+        <td>${netLabel}</td>
+        <td><a class="tx-link" href="https://${explorer}/tx/${tx}" target="_blank">${shortTx}</a></td>
+        <td><span class="status-pill ${status}">${status}</span></td>
+      `;
+      tbody.insertBefore(row, tbody.firstChild);
+    }
+  </script>
+</body>
+</html>

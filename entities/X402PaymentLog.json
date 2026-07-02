@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "endpoint": {
+      "type": "string",
+      "description": "The x402-gated URL that was called"
+    },
+    "amountPaidUsdc": {
+      "type": "number",
+      "description": "Amount paid in USDC (human-readable)"
+    },
+    "amountPaidAtomic": {
+      "type": "string",
+      "description": "Amount paid in atomic units"
+    },
+    "network": {
+      "type": "string",
+      "description": "Network used (e.g. eip155:8453 for Base mainnet)"
+    },
+    "settlementTx": {
+      "type": "string",
+      "description": "On-chain settlement transaction hash"
+    },
+    "payee": {
+      "type": "string",
+      "description": "Address that received the payment"
+    },
+    "responseSummary": {
+      "type": "string",
+      "description": "Summary of the data received from the endpoint"
+    },
+    "responseBody": {
+      "type": "string",
+      "description": "Full response body from the endpoint"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed",
+        "pending"
+      ],
+      "description": "Payment status"
+    },
+    "runSource": {
+      "type": "string",
+      "description": "What triggered this payment (manual, automation name, etc.)"
+    }
+  },
+  "type": "object",
+  "required": [],
+  "name": "X402PaymentLog"
+}

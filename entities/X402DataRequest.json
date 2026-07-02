@@ -1,0 +1,61 @@
+{
+  "properties": {
+    "url": {
+      "type": "string",
+      "description": "The x402-gated URL to fetch and pay for"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "GET",
+        "POST"
+      ],
+      "description": "HTTP method to use",
+      "default": "GET"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed",
+        "no_payment_required"
+      ],
+      "description": "Processing status",
+      "default": "pending"
+    },
+    "responseBody": {
+      "type": "string",
+      "description": "The data returned by the endpoint after payment"
+    },
+    "responseSummary": {
+      "type": "string",
+      "description": "Human-readable summary of the response"
+    },
+    "settlementTx": {
+      "type": "string",
+      "description": "On-chain settlement transaction hash"
+    },
+    "amountPaidUsdc": {
+      "type": "number",
+      "description": "Amount paid in USDC"
+    },
+    "network": {
+      "type": "string",
+      "description": "Network used for payment"
+    },
+    "payee": {
+      "type": "string",
+      "description": "Address that received the payment"
+    },
+    "processedAt": {
+      "type": "string",
+      "description": "When the request was processed"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "type": "object",
+  "name": "X402DataRequest"
+}
