@@ -21,6 +21,11 @@ const RESOURCE_URL = "https://superagent-42aeca08.base44.app/functions/x402SellP
 const PRICE_ATOMIC = "10000"; // 0.01 USDC (6 decimals)
 const NETWORK = "eip155:8453"; // Base mainnet (CAIP-2)
 
+// IMPORTANT: USDC on Base mainnet uses "USD Coin" as the EIP-712 domain name
+// (not "USDC"). This must match the token contract's domain separator.
+const EIP712_NAME = "USD Coin";
+const EIP712_VERSION = "2";
+
 const JOKES = [
   "Why do programmers prefer dark mode? Because light attracts bugs.",
   "I told my computer I needed a break, and it froze.",
@@ -37,7 +42,7 @@ function paymentRequirementsV2() {
     asset: USDC_BASE,
     payTo: RECEIVING_ADDRESS,
     maxTimeoutSeconds: 60,
-    extra: { name: "USDC", version: "2" },
+    extra: { name: EIP712_NAME, version: EIP712_VERSION },
   };
 }
 
