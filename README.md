@@ -2,20 +2,22 @@
 
 An AI agent that can **pay for and sell data** using the [x402 protocol](https://x402.org) — HTTP-native payments with USDC on Base mainnet. No API keys, no accounts, just stablecoin micropayments settled onchain.
 
+**🌐 Live Dashboard: https://superagent-42aeca08.base44.app/functions/x402Dashboard**
+
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    x402 Agent                            │
 │                                                         │
-│  ┌──────────────┐    ┌──────────────┐                  │
-│  │ x402SellPre- │    │ x402PayAnd   │                  │
-│  │ miumJoke     │    │ Fetch        │                  │
-│  │ (seller)     │    │ (buyer)      │                  │
-│  │              │    │              │                  │
-│  │ 402 → verify │    │ 402 → sign   │                  │
-│  │ → settle     │    │ → retry → ✓  │                  │
-│  └──────┬───────┘    └──────┬───────┘                  │
+│  ┌──────────────┐    ┌──────────────┐    ┌───────────┐  │
+│  │ x402SellPre- │    │ x402PayAnd   │    │ x402Dash- │  │
+│  │ miumJoke     │    │ Fetch        │    │ board     │  │
+│  │ (seller)     │    │ (buyer)      │    │ (UI)      │  │
+│  │              │    │              │    │           │  │
+│  │ 402 → verify │    │ 402 → sign   │    │ HTML page │  │
+│  │ → settle     │    │ → retry → ✓  │    │ w/ fetch  │  │
+│  └──────┬───────┘    └──────┬───────┘    └───────────┘  │
 │         │                   │                          │
 │         └───────┬───────────┘                          │
 │                 │                                      │
@@ -32,8 +34,6 @@ An AI agent that can **pay for and sell data** using the [x402 protocol](https:/
 │  Automations:                                           │
 │  • Daily scheduled x402 data purchase                   │
 │  • Entity-triggered auto-pay on new data requests       │
-│                                                         │
-│  Dashboard: dashboard/index.html                        │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -45,6 +45,7 @@ An AI agent that can **pay for and sell data** using the [x402 protocol](https:/
 |----------|------|-------------|
 | `x402SellPremiumJoke` | Seller | Paywalled endpoint (0.01 USDC). Returns 402 with payment terms, verifies & settles via CDP facilitator, returns a joke on success. |
 | `x402PayAndFetch` | Buyer | General-purpose x402 client. Takes any `{url, method}`, auto-detects 402, signs EIP-3009 `transferWithAuthorization`, retries with payment, returns unlocked content + settlement tx. |
+| `x402Dashboard` | UI | Serves the hosted dashboard as HTML at `https://superagent-42aeca08.base44.app/functions/x402Dashboard`. Calls `x402PayAndFetch` directly via fetch for real onchain payments. |
 
 ### Entities
 
@@ -62,7 +63,11 @@ An AI agent that can **pay for and sell data** using the [x402 protocol](https:/
 
 ### Dashboard
 
-`dashboard/index.html` — a standalone web UI that lets you:
+**Hosted**: https://superagent-42aeca08.base44.app/functions/x402Dashboard
+
+**Source**: `dashboard/index.html` (also served via `functions/x402Dashboard.ts`)
+
+A standalone web UI that lets you:
 - Submit x402 data requests by entering any x402-gated URL
 - View payment results (settlement tx, amount, payee, response)
 - Browse payment history with links to Basescan
