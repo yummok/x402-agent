@@ -73,6 +73,41 @@ A standalone web UI that lets you:
 - Browse payment history with links to Basescan
 - See active automations and wallet stats
 
+## Deployment Notes
+
+> Full deployment log with technical details: [`DEPLOYMENT.md`](DEPLOYMENT.md)
+
+### 2026-07-02 — Base Mainnet + Dashboard Live
+
+**Status: Fully Operational ✅**
+
+| Item | Value |
+|------|-------|
+| Network | Base mainnet (chainId 8453) |
+| Protocol | x402 v2 (CDP facilitator) |
+| Agent Wallet | `0x5F3b6a74f61ED68B14844af8b72C2D78bAD24c6f` |
+| USDC Balance | ~1.48 USDC |
+| Payments Verified | 3 successful onchain settlements |
+| GitHub Repo | [github.com/yummok/x402-agent](https://github.com/yummok/x402-agent) |
+
+**Deployed components:**
+- `x402SellPremiumJoke` — seller endpoint (0.01 USDC)
+- `x402PayAndFetch` — universal x402 buyer client
+- `x402Dashboard` — hosted interactive dashboard
+- 2 automations (daily 9AM + entity-triggered auto-pay)
+
+**Verified transactions:**
+| # | Description | Tx | Network |
+|---|-------------|-----|---------|
+| 1 | Self-payment (joke) | [`0xb2d9…34bd`](https://basescan.org/tx/0xb2d9f8feb82a38705fd73096b71692866d567b6ed5fff0d259685c6b1e2234bd) | Base mainnet |
+| 2 | Interzoid API | [`0x85e0…52a9`](https://basescan.org/tx/0x85e07f4938fabea8571d05011dbd9e124809aed23711f211a88a658b82e552a9) | Base mainnet |
+| 3 | x402.org protected | [`0xb331…5a37`](https://sepolia.basescan.org/tx/0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37) | Base Sepolia |
+
+**Key decisions:**
+- USDC EIP-712 domain name must be `"USD Coin"` (not `"USDC"`) — mismatch causes signature rejection
+- Demo payTo `0x000…0402` avoids `self_send_not_allowed` when agent pays its own endpoint
+- CDP facilitator sponsors gas — wallet only needs USDC, no ETH
+
 ## Key Technical Details
 
 ### x402 v2 Protocol
