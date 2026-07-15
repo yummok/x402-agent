@@ -1,4 +1,4 @@
-.PHONY: seller buyer dashboard test fmt lint check clean
+.PHONY: seller buyer dashboard test fmt lint check clean validate examples
 
 # Start the x402 seller endpoint
 seller:
@@ -28,6 +28,18 @@ lint:
 check:
 	deno check x402SellPremiumJoke.ts x402PayAndFetch.ts
 
+# Validate environment variables
+validate:
+	deno run --allow-env scripts/validate-env.ts
+
+# Run the CLI fetch example
+cli:
+	deno run --allow-net --allow-env scripts/cli-fetch.ts
+
 # Clean build artifacts
 clean:
 	rm -rf dist build coverage *.tsbuildinfo
+
+# Run pre-commit secret check
+pre-commit:
+	bash scripts/pre-commit-check.sh
