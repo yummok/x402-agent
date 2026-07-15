@@ -5,13 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] — 2026-07-15
+
+### Added
+- EIP-3009 transferWithAuthorization reference encoding (`src/eip3009-encoding.ts`)
+- x402 protocol constants reference (`src/x402-constants.ts`) with v1/v2 header and network mappings
+- Payment header encoding/decoding utilities (`src/header-utils.ts`)
+- Wallet utility functions (`src/wallet-utils.ts`) for USDC balance checks and address formatting
+- Payment flow diagrams for buyer and seller sides (`docs/payment-flow.md`)
+- Error handling reference (`docs/error-handling.md`)
+- FAQ document (`docs/faq.md`)
+- Wallet funding guide (`docs/wallet-funding.md`)
+- CDP setup guide (`docs/cdp-setup.md`)
+- GitHub release template
+- Dependency review configuration
+- CodeQL configuration for security scanning
+- Renovate config for automated dependency updates
+- .gitattributes for line ending normalization and linguist overrides
+- Batch test runner script for all 12 test suites
+- ADR-0007: Scheduled daily x402 data purchase
+- Tests: EIP-3009 encoding, constants, header utils, wallet utils, config validation, version detection
+- Help target in Makefile with full command listing
+- Dashboard URL tip block in README
+- Restructured documentation index with guides, reference, and project sections
+
+### Changed
+- Updated CHANGELOG to v1.3.0
+- Updated Makefile with health, tx, help, and validate targets
+- Updated ADR index to include ADR-0007
+
 ## [1.2.0] — 2026-07-15
 
 ### Added
 - Getting-started quickstart guide (`docs/getting-started.md`)
 - TypeScript configuration (`tsconfig.json`) for IDE support
 - CLI wrapper script (`scripts/cli-fetch.ts`) with pretty output
-- Example scripts: Python (`examples/python_example.py`), Node.js (`examples/node_example.js`), curl (`examples/curl_examples.sh`)
+- Example scripts: Python, Node.js, curl
 - Integration tests with mocked CDP facilitator flow
 - USDC atomic/decimal conversion tests
 - Ethereum address and private key validation tests
@@ -26,52 +55,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ADR-0006: Entity-triggered automation for data requests
 - Examples section in README with language-specific quick links
 - Stale bot config for auto-closing inactive issues/PRs
-- .editorconfig for consistent editor formatting
 - .nvmrc specifying Node.js 20 LTS
 - Makefile with validate, cli, and pre-commit targets
-- GitHub repo topics script for discoverability
 - Comprehensive API reference documentation
-- Documentation index linking all project docs
 - Expanded SECURITY.md with private key handling and report timeline
-
-### Changed
-- Improved .env.example with detailed comments and optional vars
-- Updated CHANGELOG with all 1.2.0 additions
-- Updated Makefile with new targets (validate, cli, pre-commit)
-- Updated ADR index to include ADR-0005 and ADR-0006
 
 ## [1.1.0] — 2026-07-15
 
 ### Added
 - MIT LICENSE file
-- CONTRIBUTING.md with contribution guidelines
-- Code of Conduct adapted from Contributor Covenant
-- Security policy with vulnerability reporting guidelines
-- GitHub issue templates for bugs and feature requests
-- Pull request template
+- CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md
+- GitHub issue templates and pull request template
 - CHANGELOG.md following Keep a Changelog format
-- Shared config module (`src/config.ts`) with network and contract constants
-- TypeScript type definitions (`src/types.ts`) for x402 protocol data structures
-- Utility functions (`src/utils.ts`) for USDC conversion, address validation, and nonce generation
-- Unit tests for utils and config (Deno test runner)
-- Dockerfile and .dockerignore for container development
-- Dependabot configuration for npm and GitHub Actions
-- `deno.jsonc` with task definitions and formatting/lint config
-- FUNDING.yml linking to x402 dashboard
-- .editorconfig for consistent editor formatting
-- Makefile with common dev commands
-- Environment variable validation script
-- Comprehensive API reference documentation
-- Architecture Decision Records (ADRs) for key protocol decisions
-- JSDoc comments and step-by-step documentation on both main files
+- Shared config module, TypeScript types, utility functions
+- Unit tests for utils and config
+- Dockerfile and .dockerignore
+- Dependabot configuration
+- `deno.jsonc` with task definitions
+- Architecture Decision Records (ADRs 0001-0004)
+- JSDoc comments on both main files
 - 6 additional premium jokes
-- README badges (license, network, protocol, token, CI)
-- Contributing section in README
-
-### Changed
-- Bumped version to 1.1.0
-- Expanded .gitignore with coverage, Deno, and OS-specific entries
-- Added test, fmt, lint, check scripts to package.json
+- README badges
+- .editorconfig
+- Makefile
 
 ## [1.0.0] — 2026-07-02
 
@@ -85,7 +91,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Entity schemas: `X402PaymentLog`, `X402DataRequest`
 - Scheduled automation: daily x402 data purchase
 - Entity-triggered automation: auto-pay on new data requests
-- Base Sepolia testnet support (legacy)
 
 ### Verified
 - End-to-end payment on Base mainnet (tx: `0xb2d9…34bd`)
