@@ -5,6 +5,8 @@
 | [getting-started.md](getting-started.md) | Quickstart guide — 6-step setup from zero |
 | [API.md](API.md) | API reference for all backend functions and entity schemas |
 | [payment-flow.md](payment-flow.md) | Sequence diagrams for buyer and seller payment flows |
+| [error-handling.md](error-handling.md) | All error conditions and how they're handled |
+| [faq.md](faq.md) | Frequently asked questions and troubleshooting |
 | [adr/](adr/) | Architecture Decision Records — rationale for key technical choices |
 | [../DEPLOYMENT.md](../DEPLOYMENT.md) | Full deployment log with technical details |
 | [../CHANGELOG.md](../CHANGELOG.md) | Changelog following Keep a Changelog format |
