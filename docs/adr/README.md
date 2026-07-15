@@ -10,3 +10,4 @@ This directory contains ADRs for the x402 agent project — decisions that shape
 | [0004](0004-demo-payto-address.md) | Use demo payTo address 0x...0402 | Accepted |
 | [0005](0005-dashboard-as-backend-function.md) | Dashboard as backend function | Accepted |
 | [0006](0006-entity-triggered-automation.md) | Entity-triggered automation for data requests | Accepted |
+| [0007](0007-scheduled-automation.md) | Scheduled daily x402 data purchase | Accepted |
