@@ -1,16 +1,25 @@
-// x402PayAndFetch (Base Mainnet, x402 v2)
-// Fetches a target URL. If the target responds with HTTP 402 (x402 protocol),
-// automatically signs a USDC "exact" payment authorization (EIP-3009,
-// gasless) with the agent's wallet and retries the request with proof of
-// payment attached. Supports both x402 v1 and v2 servers.
-//
-// Body params: { url: string, method?: string, body?: any }
+/**
+ * x402PayAndFetch — Universal x402 Buyer Client (Base Mainnet, x402 v2)
+ *
+ * Fetches a target URL. If the target responds with HTTP 402 (x402 protocol),
+ * automatically signs a USDC "exact" payment authorization (EIP-3009,
+ * gasless) with the agent's wallet and retries the request with proof of
+ * payment attached. Supports both x402 v1 and v2 servers.
+ *
+ * Body params: { url: string, method?: string, body?: any }
+ *
+ * @module x402PayAndFetch
+ */
 
 import { privateKeyToAccount } from "npm:viem@2.54.1/accounts";
 
-const DEFAULT_CHAIN_ID = 8453; // Base mainnet
+/** Default chain ID (Base mainnet) */
+const DEFAULT_CHAIN_ID = 8453;
+
+/** Networks the client prefers when selecting from payment options */
 const PREFERRED_NETWORKS = ["eip155:8453", "base"];
 
+/** Maps network identifiers to their chain IDs */
 const NETWORK_CHAIN_IDS: Record<string, number> = {
   "eip155:8453": 8453,
   "eip155:84532": 84532,
@@ -18,6 +27,12 @@ const NETWORK_CHAIN_IDS: Record<string, number> = {
   "base-sepolia": 84532,
 };
 
+/**
+ * Resolve a network identifier to a chain ID.
+ * Falls back to Base mainnet if the network is unknown.
+ * @param network - CAIP-2 identifier or network name (e.g. "eip155:8453", "base")
+ * @returns Chain ID number
+ */
 function chainIdFromNetwork(network: string): number {
   if (NETWORK_CHAIN_IDS[network]) return NETWORK_CHAIN_IDS[network];
   if (network.startsWith("eip155:")) {
@@ -27,6 +42,10 @@ function chainIdFromNetwork(network: string): number {
   return DEFAULT_CHAIN_ID;
 }
 
+/**
+ * Generate a random 32-byte nonce for EIP-3009 authorization.
+ * @returns Hex-encoded nonce string prefixed with 0x
+ */
 function randomNonce(): `0x${string}` {
   const bytes = new Uint8Array(32);
   crypto.getRandomValues(bytes);
@@ -36,7 +55,12 @@ function randomNonce(): `0x${string}` {
       .join("")) as `0x${string}`;
 }
 
-function safeJson(text: string) {
+/**
+ * Safely parse JSON, returning the original string if parsing fails.
+ * @param text - Text to parse
+ * @returns Parsed JSON object or original string
+ */
+function safeJson(text: string): unknown {
   try {
     return JSON.parse(text);
   } catch {
@@ -44,10 +68,20 @@ function safeJson(text: string) {
   }
 }
 
+/**
+ * Base64-encode an object as JSON.
+ * @param obj - Object to encode
+ * @returns Base64 string
+ */
 function b64Encode(obj: unknown): string {
   return btoa(JSON.stringify(obj));
 }
 
+/**
+ * Decode a base64-encoded JSON string.
+ * @param str - Base64 string to decode
+ * @returns Parsed object or null on failure
+ */
 function b64Decode(str: string): unknown {
   try {
     return JSON.parse(atob(str));
@@ -56,6 +90,15 @@ function b64Decode(str: string): unknown {
   }
 }
 
+/**
+ * Main request handler — implements the x402 pay-and-fetch flow.
+ *
+ * 1. Makes an initial request to the target URL
+ * 2. If the server returns 402, parses payment requirements
+ * 3. Signs an EIP-3009 transferWithAuthorization with the agent wallet
+ * 4. Retries the request with the payment proof attached
+ * 5. Returns the unlocked content and settlement details
+ */
 Deno.serve(async (req: Request) => {
   try {
     const { url, method = "GET", body } = await req.json();
@@ -77,6 +120,10 @@ Deno.serve(async (req: Request) => {
 
     const account = privateKeyToAccount(privateKey as `0x${string}`);
 
+    /**
+     * Fetch wrapper that injects custom headers into the request.
+     * @param headers - Additional headers to send
+     */
     const doFetch = (headers: Record<string, string>) =>
       fetch(url, {
         method,
@@ -87,6 +134,7 @@ Deno.serve(async (req: Request) => {
     // Step 1: initial request, no payment
     const initRes = await doFetch({});
 
+    // If the resource doesn't require payment, return the content directly
     if (initRes.status !== 402) {
       const text = await initRes.text();
       return new Response(
@@ -100,7 +148,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Parse 402 response — v2 uses PAYMENT-REQUIRED header, v1 uses body
+    // Step 2: Parse 402 response — v2 uses PAYMENT-REQUIRED header, v1 uses body
     let paymentRequired: any = null;
     let isV2 = false;
 
@@ -117,6 +165,7 @@ Deno.serve(async (req: Request) => {
       isV2 = (paymentRequired?.x402Version === 2);
     }
 
+    // Step 3: Select a compatible payment scheme
     const accepts = Array.isArray(paymentRequired?.accepts) ? paymentRequired.accepts : [];
     const requirement =
       accepts.find((a: any) => a.scheme === "exact" && PREFERRED_NETWORKS.includes(a.network)) ||
@@ -129,7 +178,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // v2 uses "amount", v1 uses "maxAmountRequired"
+    // Step 4: Build the EIP-3009 authorization message
     const amount = requirement.amount || requirement.maxAmountRequired;
     const chainId = chainIdFromNetwork(requirement.network);
     const now = Math.floor(Date.now() / 1000);
@@ -137,6 +186,7 @@ Deno.serve(async (req: Request) => {
     const validBefore = (now + (requirement.maxTimeoutSeconds || 60)).toString();
     const nonce = randomNonce();
 
+    // EIP-712 domain — must use "USD Coin" for USDC on Base mainnet
     const domain = {
       name: requirement.extra?.name || "USDC",
       version: requirement.extra?.version || "2",
@@ -164,6 +214,7 @@ Deno.serve(async (req: Request) => {
       nonce,
     };
 
+    // Sign the EIP-3009 transfer authorization
     const signature = await account.signTypedData({
       domain,
       types,
@@ -171,7 +222,7 @@ Deno.serve(async (req: Request) => {
       message,
     });
 
-    // Build payment payload — v2 format
+    // Step 5: Build payment payload — format depends on protocol version
     let paymentPayload: any;
     let paymentHeaderName: string;
 
@@ -194,7 +245,6 @@ Deno.serve(async (req: Request) => {
       };
       paymentHeaderName = "PAYMENT-SIGNATURE";
     } else {
-      // v1 format
       paymentPayload = {
         x402Version: 1,
         scheme: "exact",
@@ -216,11 +266,11 @@ Deno.serve(async (req: Request) => {
 
     const paymentHeader = b64Encode(paymentPayload);
 
-    // Step 2: retry with proof of payment attached
+    // Step 6: Retry the original request with proof of payment
     const finalRes = await doFetch({ [paymentHeaderName]: paymentHeader });
     const finalText = await finalRes.text();
 
-    // v2 uses PAYMENT-RESPONSE, v1 uses X-PAYMENT-RESPONSE
+    // Parse settlement response — v2 uses PAYMENT-RESPONSE, v1 uses X-PAYMENT-RESPONSE
     const paymentResponseHeader =
       finalRes.headers.get("PAYMENT-RESPONSE") ||
       finalRes.headers.get("Payment-Response") ||
