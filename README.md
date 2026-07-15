@@ -199,6 +199,18 @@ deno run --allow-net --allow-env x402PayAndFetch.ts
 - External payment (Interzoid): `0x85e07f4938fabea8571d05011dbd9e124809aed23f11f211a88a658b82e552a9` on Base mainnet
 - x402.org protected: `0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37` on Base Sepolia
 
+## Examples
+Example scripts for calling the x402 agent API:
+
+| Language | File | Run |
+|----------|------|-----|
+| Shell (curl) | [`examples/curl_examples.sh`](examples/curl_examples.sh) | `bash examples/curl_examples.sh` |
+| Python | [`examples/python_example.py`](examples/python_example.py) | `python examples/python_example.py <url>` |
+| Node.js | [`examples/node_example.js`](examples/node_example.js) | `node examples/node_example.js <url>` |
+| Deno (CLI) | [`scripts/cli-fetch.ts`](scripts/cli-fetch.ts) | `deno run --allow-net --allow-env scripts/cli-fetch.ts <url>` |
+
+See [`docs/getting-started.md`](docs/getting-started.md) for a full walkthrough.
+
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting bugs, suggesting features, and submitting pull requests.
 
