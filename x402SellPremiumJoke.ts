@@ -47,6 +47,12 @@ const EIP712_VERSION = "2";
 
 /** Collection of premium jokes returned on successful payment */
 const JOKES = [
+  "Why did the blockchain go to therapy? It had too many unresolved forks.",
+  "How many Ethereum devs does it take to change a lightbulb? None — they just hard-fork the room.",
+  "I tried to pay for coffee with USDC. The barista said they only accept... never mind, the facilitator handled it.",
+  "Why did the smart contract break up with the oracle? It said the oracle was feeding it bad data.",
+  "What is a smart contract's favorite type of music? Heavy meta-transaction.",
+  "I asked the facilitator for gas money. It said: don't worry, I'll sponsor it."
   "Why do programmers prefer dark mode? Because light attracts bugs.",
   "I told my computer I needed a break, and it froze.",
   "There are only 10 types of people: those who understand binary and those who don't.",
