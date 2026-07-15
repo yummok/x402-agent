@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  x402-seller:
+    build: .
+    command: deno run --allow-net --allow-env x402SellPremiumJoke.ts
+    ports:
+      - "8000:8000"
+    env_file: .env
+    restart: unless-stopped
+
+  x402-dashboard:
+    build: .
+    command: deno run --allow-net --allow-env functions/x402Dashboard.ts
+    ports:
+      - "3000:3000"
+    env_file: .env
+    depends_on:
+      - x402-seller
+    restart: unless-stopped
