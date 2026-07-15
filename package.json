@@ -1,6 +1,6 @@
 {
   "name": "x402-agent",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "AI agent for sending and receiving USDC micropayments via the x402 protocol on Base",
   "license": "MIT",
   "type": "module",
@@ -12,9 +12,13 @@
     "micropayments",
     "ai-agent",
     "eip-3009",
+    "eip-712",
     "coinbase",
     "cdp",
-    "blockchain"
+    "blockchain",
+    "stablecoin",
+    "defi",
+    "http-402"
   ],
   "scripts": {
     "start:seller": "deno run --allow-net --allow-env x402SellPremiumJoke.ts",
