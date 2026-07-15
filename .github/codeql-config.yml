@@ -1,0 +1,24 @@
+# CodeQL configuration for the x402 agent.
+# This file configures GitHub's native code scanning.
+# Enable in: Settings → Security & analysis → CodeQL analysis → Set up
+name: "x402 Agent CodeQL Config"
+
+# Only scan TypeScript and JavaScript files
+languages:
+  - javascript
+  - typescript
+
+# Exclude test fixtures and generated files
+paths-ignore:
+  - "node_modules"
+  - "dist"
+  - "build"
+  - "coverage"
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
+  - "examples/**"
+
+# Run queries with high security severity
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
