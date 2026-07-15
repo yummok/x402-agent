@@ -1,0 +1,11 @@
+# Configuration for GitHub's dependency review action.
+# This runs on pull requests to check for vulnerable dependencies.
+# Enable in: Settings → Security & analysis → Dependency review
+allow-licenses:
+  - MIT
+  - Apache-2.0
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - ISC
+  - Unlicense
+fail-on-severity: high
