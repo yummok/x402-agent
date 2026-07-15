@@ -21,6 +21,16 @@ jobs:
       - name: Type check
         run: deno check x402SellPremiumJoke.ts x402PayAndFetch.ts
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run tests
+        run: deno test --allow-read tests/
+
   security-scan:
     runs-on: ubuntu-latest
     steps:
