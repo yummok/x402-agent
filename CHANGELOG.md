@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-07-15
+
+### Added
+- Getting-started quickstart guide (`docs/getting-started.md`)
+- TypeScript configuration (`tsconfig.json`) for IDE support
+- CLI wrapper script (`scripts/cli-fetch.ts`) with pretty output
+- Example scripts: Python (`examples/python_example.py`), Node.js (`examples/node_example.js`), curl (`examples/curl_examples.sh`)
+- Integration tests with mocked CDP facilitator flow
+- USDC atomic/decimal conversion tests
+- Ethereum address and private key validation tests
+- Nonce generation tests for uniqueness and format
+- CONTRIBUTORS.md listing project contributors
+- docker-compose.yml for local multi-service development
+- Health check script for endpoint monitoring
+- Transaction lookup helper linking to Basescan
+- Pre-commit hook script for secret detection
+- Environment variable validation script
+- ADR-0005: Dashboard as backend function
+- ADR-0006: Entity-triggered automation for data requests
+- Examples section in README with language-specific quick links
+- Stale bot config for auto-closing inactive issues/PRs
+- .editorconfig for consistent editor formatting
+- .nvmrc specifying Node.js 20 LTS
+- Makefile with validate, cli, and pre-commit targets
+- GitHub repo topics script for discoverability
+- Comprehensive API reference documentation
+- Documentation index linking all project docs
+- Expanded SECURITY.md with private key handling and report timeline
+
+### Changed
+- Improved .env.example with detailed comments and optional vars
+- Updated CHANGELOG with all 1.2.0 additions
+- Updated Makefile with new targets (validate, cli, pre-commit)
+- Updated ADR index to include ADR-0005 and ADR-0006
+
 ## [1.1.0] — 2026-07-15
 
 ### Added
@@ -51,7 +86,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scheduled automation: daily x402 data purchase
 - Entity-triggered automation: auto-pay on new data requests
 - Base Sepolia testnet support (legacy)
-- MIT license
 
 ### Verified
 - End-to-end payment on Base mainnet (tx: `0xb2d9…34bd`)
