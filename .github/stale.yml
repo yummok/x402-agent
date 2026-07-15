@@ -1,0 +1,14 @@
+# Configuration for stale issues and PRs bot
+daysUntilStale: 60
+daysUntilClose: 7
+exemptLabels:
+  - pinned
+  - security
+  - enhancement
+staleLabel: stale
+issues:
+  staleMessage: "This issue has been inactive for 60 days. Marking as stale — it will be closed in 7 days unless there's further activity."
+  closeMessage: "Closing this stale issue. Feel free to reopen if it's still relevant."
+pulls:
+  staleMessage: "This PR has been inactive for 60 days. Marking as stale — it will be closed in 7 days unless there's further activity."
+  closeMessage: "Closing this stale PR. Feel free to reopen if you're still working on it."
