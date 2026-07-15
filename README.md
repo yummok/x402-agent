@@ -1,5 +1,9 @@
 # x402 Agent — USDC Micropayments on Base
 
+> [!TIP]
+> **Interactive Dashboard:** [https://superagent-42aeca08.base44.app/functions/x402Dashboard](https://superagent-42aeca08.base44.app/functions/x402Dashboard)
+
+
 
 ![x402](https://img.shields.io/badge/⚡_x402-Payments-8A2BE2?style=for-the-badge)
 
