@@ -1,5 +1,11 @@
 # x402 Agent — USDC Micropayments on Base
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Network: Base](https://img.shields.io/badge/Network-Base%20Mainnet-0052FF)
+![Protocol: x402 v2](https://img.shields.io/badge/Protocol-x402%20v2-8A2BE2)
+![Token: USDC](https://img.shields.io/badge/Token-USDC-2775CA)
+![CI](https://github.com/yummok/x402-agent/actions/workflows/ci.yml/badge.svg)
+
 An AI agent that can **pay for and sell data** using the [x402 protocol](https://x402.org) — HTTP-native payments with USDC on Base mainnet. No API keys, no accounts, just stablecoin micropayments settled onchain.
 
 **🌐 Live Dashboard: https://superagent-42aeca08.base44.app/functions/x402Dashboard**
@@ -100,7 +106,7 @@ A standalone web UI that lets you:
 | # | Description | Tx | Network |
 |---|-------------|-----|---------|
 | 1 | Self-payment (joke) | [`0xb2d9…34bd`](https://basescan.org/tx/0xb2d9f8feb82a38705fd73096b71692866d567b6ed5fff0d259685c6b1e2234bd) | Base mainnet |
-| 2 | Interzoid API | [`0x85e0…52a9`](https://basescan.org/tx/0x85e07f4938fabea8571d05011dbd9e124809aed23711f211a88a658b82e552a9) | Base mainnet |
+| 2 | Interzoid API | [`0x85e0…52a9`](https://basescan.org/tx/0x85e07f4938fabea8571d05011dbd9e124809aed23f11f211a88a658b82e552a9) | Base mainnet |
 | 3 | x402.org protected | [`0xb331…5a37`](https://sepolia.basescan.org/tx/0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37) | Base Sepolia |
 
 **Key decisions:**
@@ -164,12 +170,32 @@ CDP_API_KEY_ID=your_cdp_key_id       # CDP API key ID
 CDP_API_KEY_SECRET=your_cdp_secret   # CDP API key secret
 ```
 
+### Running Tests
+
+```bash
+# Run unit tests with Deno
+deno test --allow-read tests/
+
+# Run a specific test file
+deno test --allow-read tests/utils_test.ts
+```
+
+### Running Locally
+
+```bash
+# Start the seller endpoint
+deno run --allow-net --allow-env x402SellPremiumJoke.ts
+
+# Run the buyer client against any x402-gated URL
+deno run --allow-net --allow-env x402PayAndFetch.ts
+```
+
 ### Verified Transactions
 
 - Self-payment (joke): `0xb2d9f8feb82a38705fd73096b71692866d567b6ed5fff0d259685c6b1e2234bd` on Base mainnet
-- External payment (Interzoid): `0x85e07f4938fabea8571d05011dbd9e124809aed23711f211a88a658b82e552a9` on Base mainnet
+- External payment (Interzoid): `0x85e07f4938fabea8571d05011dbd9e124809aed23f11f211a88a658b82e552a9` on Base mainnet
 - x402.org protected: `0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37` on Base Sepolia
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE)
