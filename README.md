@@ -1,5 +1,8 @@
 # x402 Agent — USDC Micropayments on Base
 
+
+![x402](https://img.shields.io/badge/⚡_x402-Payments-8A2BE2?style=for-the-badge)
+
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Network: Base](https://img.shields.io/badge/Network-Base%20Mainnet-0052FF)
 ![Protocol: x402 v2](https://img.shields.io/badge/Protocol-x402%20v2-8A2BE2)
