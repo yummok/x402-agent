@@ -1,0 +1,4 @@
+# Funding: This project accepts USDC micropayments via the x402 protocol on Base.
+# You can pay any x402-gated endpoint listed in the README.
+# For direct contributions, open an issue or PR.
+custom: ["https://superagent-42aeca08.base44.app/functions/x402Dashboard"]
