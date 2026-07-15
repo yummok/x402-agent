@@ -196,6 +196,9 @@ deno run --allow-net --allow-env x402PayAndFetch.ts
 - External payment (Interzoid): `0x85e07f4938fabea8571d05011dbd9e124809aed23f11f211a88a658b82e552a9` on Base mainnet
 - x402.org protected: `0xb331f0c4509568c718370950323c1f43f18809ce7c44440f91cd7fc464c55a37` on Base Sepolia
 
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting bugs, suggesting features, and submitting pull requests.
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
