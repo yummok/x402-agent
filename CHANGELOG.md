@@ -5,13 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] — 2026-07-15
 
 ### Added
-- GitHub Actions CI workflow with Deno lint, format check, and secret scanning
-- Issue and PR templates
-- Security policy and Code of Conduct
-- Contributing guidelines
+- MIT LICENSE file
+- CONTRIBUTING.md with contribution guidelines
+- Code of Conduct adapted from Contributor Covenant
+- Security policy with vulnerability reporting guidelines
+- GitHub issue templates for bugs and feature requests
+- Pull request template
+- CHANGELOG.md following Keep a Changelog format
+- Shared config module (`src/config.ts`) with network and contract constants
+- TypeScript type definitions (`src/types.ts`) for x402 protocol data structures
+- Utility functions (`src/utils.ts`) for USDC conversion, address validation, and nonce generation
+- Unit tests for utils and config (Deno test runner)
+- Dockerfile and .dockerignore for container development
+- Dependabot configuration for npm and GitHub Actions
+- `deno.jsonc` with task definitions and formatting/lint config
+- FUNDING.yml linking to x402 dashboard
+- .editorconfig for consistent editor formatting
+- Makefile with common dev commands
+- Environment variable validation script
+- Comprehensive API reference documentation
+- Architecture Decision Records (ADRs) for key protocol decisions
+- JSDoc comments and step-by-step documentation on both main files
+- 6 additional premium jokes
+- README badges (license, network, protocol, token, CI)
+- Contributing section in README
+
+### Changed
+- Bumped version to 1.1.0
+- Expanded .gitignore with coverage, Deno, and OS-specific entries
+- Added test, fmt, lint, check scripts to package.json
 
 ## [1.0.0] — 2026-07-02
 
