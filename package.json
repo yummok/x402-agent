@@ -4,6 +4,18 @@
   "description": "AI agent for sending and receiving USDC micropayments via the x402 protocol on Base",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "x402",
+    "usdc",
+    "base",
+    "payments",
+    "micropayments",
+    "ai-agent",
+    "eip-3009",
+    "coinbase",
+    "cdp",
+    "blockchain"
+  ],
   "scripts": {
     "start:seller": "deno run --allow-net --allow-env x402SellPremiumJoke.ts",
     "start:buyer": "deno run --allow-net --allow-env x402PayAndFetch.ts",
@@ -11,7 +23,8 @@
     "test": "deno test --allow-read tests/",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "check": "deno check x402SellPremiumJoke.ts x402PayAndFetch.ts"
+    "check": "deno check x402SellPremiumJoke.ts x402PayAndFetch.ts",
+    "validate:env": "deno run --allow-env scripts/validate-env.ts"
   },
   "dependencies": {
     "@coinbase/cdp-sdk": "^1.51.2",
