@@ -1,6 +1,6 @@
 {
   "name": "x402-agent",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "AI agent for sending and receiving USDC micropayments via the x402 protocol on Base",
   "license": "MIT",
   "type": "module",
