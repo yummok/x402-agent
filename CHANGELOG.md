@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2026-07-16
+
+### Added
+- Token-bucket rate limiter for x402 payment request throttling (`src/rate-limiter.ts`)
+- Exponential backoff retry helper with jitter for facilitator calls (`src/retry.ts`)
+- Payment amount parser for atomic/human-readable USDC conversion (`src/payment-parser.ts`)
+- Rate limiter tests (7 test cases)
+- Retry helper tests (10 test cases)
+- Payment parser tests (13 test cases)
+
 ## [1.3.0] — 2026-07-15
 
 ### Added
@@ -29,55 +39,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dashboard URL tip block in README
 - Restructured documentation index with guides, reference, and project sections
 
-### Changed
-- Updated CHANGELOG to v1.3.0
-- Updated Makefile with health, tx, help, and validate targets
-- Updated ADR index to include ADR-0007
-
 ## [1.2.0] — 2026-07-15
 
 ### Added
-- Getting-started quickstart guide (`docs/getting-started.md`)
-- TypeScript configuration (`tsconfig.json`) for IDE support
-- CLI wrapper script (`scripts/cli-fetch.ts`) with pretty output
+- Getting-started quickstart guide, TypeScript configuration, CLI wrapper
 - Example scripts: Python, Node.js, curl
-- Integration tests with mocked CDP facilitator flow
-- USDC atomic/decimal conversion tests
-- Ethereum address and private key validation tests
-- Nonce generation tests for uniqueness and format
-- CONTRIBUTORS.md listing project contributors
-- docker-compose.yml for local multi-service development
-- Health check script for endpoint monitoring
-- Transaction lookup helper linking to Basescan
-- Pre-commit hook script for secret detection
-- Environment variable validation script
-- ADR-0005: Dashboard as backend function
-- ADR-0006: Entity-triggered automation for data requests
-- Examples section in README with language-specific quick links
-- Stale bot config for auto-closing inactive issues/PRs
-- .nvmrc specifying Node.js 20 LTS
-- Makefile with validate, cli, and pre-commit targets
-- Comprehensive API reference documentation
-- Expanded SECURITY.md with private key handling and report timeline
+- Integration tests, USDC conversion tests, address validation, nonce generation tests
+- CONTRIBUTORS.md, docker-compose.yml, health check script, tx lookup helper
+- Pre-commit hook, env validation script, ADRs 0005-0006
+- .nvmrc, comprehensive API reference, expanded SECURITY.md
 
 ## [1.1.0] — 2026-07-15
 
 ### Added
-- MIT LICENSE file
-- CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md
-- GitHub issue templates and pull request template
-- CHANGELOG.md following Keep a Changelog format
+- MIT LICENSE, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md
+- GitHub issue/PR templates, CHANGELOG.md
 - Shared config module, TypeScript types, utility functions
-- Unit tests for utils and config
-- Dockerfile and .dockerignore
-- Dependabot configuration
-- `deno.jsonc` with task definitions
-- Architecture Decision Records (ADRs 0001-0004)
-- JSDoc comments on both main files
-- 6 additional premium jokes
-- README badges
-- .editorconfig
-- Makefile
+- Unit tests, Dockerfile, Dependabot, deno.jsonc
+- ADRs 0001-0004, JSDoc comments, README badges, .editorconfig, Makefile
 
 ## [1.0.0] — 2026-07-02
 
@@ -86,11 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `x402SellPremiumJoke` — paywalled seller endpoint (0.01 USDC)
 - `x402PayAndFetch` — universal x402 buyer client
 - `x402Dashboard` — hosted interactive dashboard
-- CDP facilitator integration for verify & settle
-- EIP-3009 `transferWithAuthorization` signing
-- Entity schemas: `X402PaymentLog`, `X402DataRequest`
-- Scheduled automation: daily x402 data purchase
-- Entity-triggered automation: auto-pay on new data requests
+- CDP facilitator integration, EIP-3009 signing
+- Entity schemas, scheduled and entity-triggered automations
 
 ### Verified
 - End-to-end payment on Base mainnet (tx: `0xb2d9…34bd`)
